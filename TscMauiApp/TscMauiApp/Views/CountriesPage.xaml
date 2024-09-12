@@ -3,11 +3,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:models="clr-namespace:TscMauiApp.Models"
+             xmlns:viewmodels="clr-namespace:TscMauiApp.ViewModels"
              x:Class="TscMauiApp.Views.CountriesPage"
              Title="Countries">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.ToolbarItems>
         <ToolbarItem 
-            Text="Add" />
+            Text="Add"
+            Command="{Binding AddNewCountryCommand}" />
     </ContentPage.ToolbarItems>
     <Grid>
         <ActivityIndicator
@@ -15,17 +22,40 @@
             VerticalOptions="Start"
             Margin="0,16,0,0" />
         <CollectionView 
-            ItemsSource="{Binding Countries}">
+            ItemsSource="{Binding Countries}"
+            x:Name="CountryList"
+            SelectionMode="Single"
+            SelectionChangedCommand="{Binding CountrySelectedCommand}"
+            SelectionChangedCommandParameter="{Binding Path=SelectedItem, Source={x:Reference CountryList}}"
+            SelectionChanged="CountryList_SelectionChanged">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:Country">
                     <ContentView>
                         <VerticalStackLayout>
-                            <Label 
-                                Text="{Binding Name}"
-                                FontSize="16"
-                                VerticalTextAlignment="Center"
-                                HeightRequest="64"
-                                Margin="20,0" />
+                            <SwipeView>
+                                <VerticalStackLayout BackgroundColor="White">
+                                    <Label 
+                                        Text="{Binding Name}"
+                                        FontSize="16"
+                                        VerticalTextAlignment="Center"
+                                        HeightRequest="64"
+                                        Margin="20,0" />
+                                </VerticalStackLayout>
+                                <SwipeView.RightItems>
+                                    <SwipeItems>
+                                        <SwipeItem 
+                                            Text="Delete"
+                                            BackgroundColor="Red"
+                                            Command="{Binding DeleteCountryCommand,Source={RelativeSource AncestorType={x:Type viewmodels:CountriesPageViewModel}}}"
+                                            CommandParameter="{Binding .}" />
+                                        <SwipeItem 
+                                            Text="Edit"
+                                            BackgroundColor="LightGray"
+                                            Command="{Binding EditCountryCommand,Source={RelativeSource AncestorType={x:Type viewmodels:CountriesPageViewModel}}}"
+                                            CommandParameter="{Binding .}" />
+                                    </SwipeItems>
+                                </SwipeView.RightItems>
+                            </SwipeView>
                             <BoxView HeightRequest="1" />                
                         </VerticalStackLayout>
                     </ContentView>

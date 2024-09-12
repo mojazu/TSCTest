@@ -10,4 +10,9 @@ public partial class CountriesPage : ContentPage
 		
 		InitializeComponent();
 	}
+
+    private void CountryList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+		(sender as CollectionView)!.SelectedItem = null;
+    }
 }

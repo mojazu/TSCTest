@@ -1,5 +1,6 @@
 using System;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using TscMauiApp.Models;
 using TscMauiApp.Services.Interfaces;
 
@@ -37,5 +38,34 @@ public partial class CountriesPageViewModel : BaseViewModel
         {
             await _dialogService.ShowAlert("Error", "An error has occurred.", "OK");
         }
+    }
+
+    [RelayCommand]
+    private async Task CountrySelectedAsync(Country country)
+    {
+        if (country == null) return;
+
+        //TODO: CountryDetail navigation
+    }
+
+    [RelayCommand]
+    private async Task AddNewCountryAsync()
+    {
+        //TODO: AddNewCountry navigation
+    }
+
+    [RelayCommand]
+    private async Task EditCountryAsync(Country country)
+    {
+        //TODO: EditCountry navigation
+    }
+
+    [RelayCommand]
+    private async Task DeleteCountryAsync(Country country)
+    {
+        var result = await _dialogService.ShowAlert("Delete Country", $"Are you sure you want to delete {country.Name}?", "Delete", "Cancel");
+        if (!result) return;
+
+        //TODO: Delete country and refresh list.
     }
 }
