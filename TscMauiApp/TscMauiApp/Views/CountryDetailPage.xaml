@@ -1,12 +1,103 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:models="clr-namespace:TscMauiApp.Models"
+             xmlns:viewmodels="clr-namespace:TscMauiApp.ViewModels"
              x:Class="TscMauiApp.Views.CountryDetailPage"
-             Title="CountryDetailPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             Title="{Binding Country.Name}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <Grid
+        RowDefinitions="Auto,Auto,Auto,Auto,Auto,*"
+        ColumnDefinitions="Auto,*"
+        ColumnSpacing="16"
+        RowSpacing="16"
+        Margin="16">
+        <Label
+            Grid.Row="0"
+            Grid.Column="0"
+            Text="ISO 3166 Name:" />
+        <Label
+            Grid.Row="0"
+            Grid.Column="1"
+            Text="{Binding Country.Name}" />
+        <Label
+            Grid.Row="1"
+            Grid.Column="0"
+            Text="Alpha-2 Code:" />
+        <Label
+            Grid.Row="1"
+            Grid.Column="1"
+            Text="{Binding Country.Alpha2}" />
+        <Label
+            Grid.Row="2"
+            Grid.Column="0"
+            Text="Alpha-3 Code:" />
+        <Label
+            Grid.Row="2"
+            Grid.Column="1"
+            Text="{Binding Country.Alpha3}" />
+        <Label
+            Grid.Row="3"
+            Grid.Column="0"
+            Text="Area Code:" />
+        <Label
+            Grid.Row="3"
+            Grid.Column="1"
+            Text="{Binding Country.Code}" />
+        <Label
+            Grid.Row="4"
+            Grid.Column="0"
+            Text="Subdivisions"
+            VerticalOptions="Center"
+            FontSize="16"
+            Margin="0,20,0,0" />
+        <Button
+            Grid.Row="4"
+            Grid.Column="1"
+            Text="Add"
+            HorizontalOptions="End"
+            Margin="0,20,0,0" />
+        <ActivityIndicator 
+            Grid.Row="5"
+            Grid.ColumnSpan="2"
+            IsRunning="{Binding IsBusy}"
+            VerticalOptions="Start" />
+        <CollectionView
+            Grid.Row="5"
+            Grid.ColumnSpan="2"
+            ItemsSource="{Binding Subdivisions}"
+            IsVisible="{Binding IsBusy,Converter={StaticResource InvertedBoolConverter}}"
+            SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:CountrySubdivision">
+                    <SwipeView>
+                        <ContentView BackgroundColor="White">
+                            <Label 
+                                Text="{Binding Name}"
+                                Margin="16" />
+                        </ContentView>
+                        <SwipeView.RightItems>
+                            <SwipeItems>
+                                <SwipeItem 
+                                    Text="Delete"
+                                    BackgroundColor="Red"
+                                    Command="{Binding DeleteSubdivisionCommand,Source={RelativeSource AncestorType={x:Type viewmodels:CountryDetailPageViewModel}}}"
+                                    CommandParameter="{Binding .}" />
+                                <SwipeItem 
+                                    Text="Edit"
+                                    BackgroundColor="LightGray"
+                                    Command="{Binding EditSubdivisionCommand,Source={RelativeSource AncestorType={x:Type viewmodels:CountryDetailPageViewModel}}}"
+                                    CommandParameter="{Binding .}" />
+                            </SwipeItems>
+                        </SwipeView.RightItems>
+                    </SwipeView>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
 </ContentPage>
