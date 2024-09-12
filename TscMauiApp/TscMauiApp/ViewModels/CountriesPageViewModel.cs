@@ -37,6 +37,7 @@ public partial class CountriesPageViewModel : BaseViewModel
         catch (Exception)
         {
             await _dialogService.ShowAlert("Error", "An error has occurred.", "OK");
+            _ = LoadCountries();
         }
     }
 
@@ -45,7 +46,9 @@ public partial class CountriesPageViewModel : BaseViewModel
     {
         if (country == null) return;
 
-        //TODO: CountryDetail navigation
+        await _navigationService.NavigateToAsync(
+            "CountryDetail",
+            new Dictionary<string, object> { { "Country", country } });
     }
 
     [RelayCommand]
