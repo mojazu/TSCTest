@@ -31,7 +31,8 @@ public partial class LoginPageViewModel : BaseViewModel
             await _dialogService.ShowAlert("Error", "Invalid credentials.", "OK");
             return;
         }
-        //TODO: Navigate to countries page
+
+        await _navigationService.NavigateToAsync("//Countries");
     }
 
     private bool ValidateUser()

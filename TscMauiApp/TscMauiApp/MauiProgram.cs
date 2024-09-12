@@ -37,13 +37,15 @@ public static class MauiProgram
 	{
 		builder.Services.AddSingleton<INavigationService, NavigationService>();
 		builder.Services.AddSingleton<IDialogService, DialogService>();
-		
+		builder.Services.AddSingleton<ICountryService, CountryService>();
+
 		return builder;
 	}
 
 	public static MauiAppBuilder RegisterViews(this MauiAppBuilder builder)
 	{
 		builder.Services.AddTransient<LoginPage>();
+		builder.Services.AddTransient<CountriesPage>();
 
 		return builder;
 	}
@@ -51,6 +53,7 @@ public static class MauiProgram
 	public static MauiAppBuilder RegisterViewModels(this MauiAppBuilder builder)
 	{
 		builder.Services.AddTransient<LoginPageViewModel>();
+		builder.Services.AddTransient<CountriesPageViewModel>();
 
 		return builder;
 	}
@@ -58,5 +61,6 @@ public static class MauiProgram
 	private static void RegisterRoutes()
 	{
 		Routing.RegisterRoute("Login", typeof(LoginPage));
+		Routing.RegisterRoute("Countries", typeof(CountriesPage));
 	}
 }

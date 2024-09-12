@@ -6,8 +6,11 @@
     xmlns:local="clr-namespace:TscMauiApp"
     xmlns:views="clr-namespace:TscMauiApp.Views"
     Shell.FlyoutBehavior="Disabled"
-    Title="TscMauiApp">
+    Title="TSC MAUI Test">
     <ShellContent
         ContentTemplate="{DataTemplate views:LoginPage}"
         Route="Login" />
+    <ShellContent
+        ContentTemplate="{DataTemplate views:CountriesPage}"
+        Route="Countries" />
 </Shell>
