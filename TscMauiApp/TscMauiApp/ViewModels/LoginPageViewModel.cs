@@ -19,8 +19,8 @@ public partial class LoginPageViewModel : BaseViewModel
     public LoginPageViewModel(INavigationService navigationService, IDialogService dialogService)
         : base(navigationService, dialogService)
     {
-        // Email = TestValidEmail;
-        // Password = TestValidPassword;
+        Email = TestValidEmail;
+        Password = TestValidPassword;
     }
 
     [RelayCommand]
@@ -31,7 +31,8 @@ public partial class LoginPageViewModel : BaseViewModel
             await _dialogService.ShowAlert("Error", "Invalid credentials.", "OK");
             return;
         }
-        //TODO: Navigate to countries page
+
+        await _navigationService.NavigateToAsync("//Countries");
     }
 
     private bool ValidateUser()
