@@ -60,6 +60,7 @@
             Grid.Row="4"
             Grid.Column="1"
             Text="Add"
+            Command="{Binding AddSubdivisionCommand}"
             HorizontalOptions="End"
             Margin="0,20,0,0" />
         <ActivityIndicator 

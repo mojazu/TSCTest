@@ -47,6 +47,12 @@ public partial class CountryDetailPageViewModel : BaseViewModel
     }
 
     [RelayCommand]
+    private async Task AddSubdivisionAsync()
+    {
+        await _navigationService.NavigateToAsync("/AddSubdivision");
+    }
+
+    [RelayCommand]
     private async Task EditSubdivisionAsync(CountrySubdivision subdivision)
     {
         Console.WriteLine("PENDING - Edit subdivision:");
