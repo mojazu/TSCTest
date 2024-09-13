@@ -69,7 +69,12 @@ public class CountryService : ICountryService
         var uri = new Uri($"{BaseUrl}{EndpointCountries}");
         try
         {
-            string json = JsonConvert.SerializeObject(country);
+            string json = JsonConvert.SerializeObject(country,
+                                                      Formatting.None,
+                                                      new JsonSerializerSettings
+                                                      {
+                                                          NullValueHandling = NullValueHandling.Ignore
+                                                      });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             HttpResponseMessage response = await _client.PostAsync(uri, content);
 
@@ -88,7 +93,12 @@ public class CountryService : ICountryService
         var uri = new Uri($"{BaseUrl}{countryUri}");
         try
         {
-            string json = JsonConvert.SerializeObject(country);
+            string json = JsonConvert.SerializeObject(country,
+                                                      Formatting.None,
+                                                      new JsonSerializerSettings
+                                                      {
+                                                          NullValueHandling = NullValueHandling.Ignore
+                                                      });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             HttpResponseMessage response = await _client.PutAsync(uri, content);
 

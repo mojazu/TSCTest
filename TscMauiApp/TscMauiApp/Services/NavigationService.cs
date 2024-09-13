@@ -11,4 +11,11 @@ public class NavigationService : INavigationService
             ? Shell.Current.GoToAsync(route, routeParameters)
             : Shell.Current.GoToAsync(route);
     }
+
+    public Task PopAsync(bool forceRefresh = false)
+    {
+        return forceRefresh
+            ? Shell.Current.GoToAsync($"..?refresh={forceRefresh}")
+            : Shell.Current.GoToAsync($"..");
+    }
 }

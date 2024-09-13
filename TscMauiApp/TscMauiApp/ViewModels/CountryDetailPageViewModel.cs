@@ -32,7 +32,7 @@ public partial class CountryDetailPageViewModel : BaseViewModel
         try
         {
             IsBusy = true;
-            var subdivisions = await _countryService.GetCountrySubdivisions(Country.Id);
+            var subdivisions = await _countryService.GetCountrySubdivisions(Country.Id.Value);
             IsBusy = false;
 
             if (subdivisions != null)

@@ -6,12 +6,16 @@ using TscMauiApp.Services.Interfaces;
 
 namespace TscMauiApp.ViewModels;
 
+[QueryProperty(nameof(ShouldRefresh), "refresh")]
 public partial class CountriesPageViewModel : BaseViewModel
 {
     private readonly ICountryService _countryService;
 
     [ObservableProperty]
     private List<Country> _countries;
+
+    [ObservableProperty]
+    private bool _shouldRefresh;
 
     public CountriesPageViewModel(INavigationService navigationService, IDialogService dialogService, ICountryService countryService)
         : base(navigationService, dialogService)
@@ -33,11 +37,20 @@ public partial class CountriesPageViewModel : BaseViewModel
             {
                 Countries = countries;
             }
+            ShouldRefresh = false;
         }
         catch (Exception)
         {
             await _dialogService.ShowAlert("Error", "An error has occurred.", "OK");
             IsBusy = false;
+            _ = LoadCountries();
+        }
+    }
+
+    partial void OnShouldRefreshChanged(bool value)
+    {
+        if (value)
+        {
             _ = LoadCountries();
         }
     }
@@ -75,7 +88,7 @@ public partial class CountriesPageViewModel : BaseViewModel
         try
         {
             IsBusy = true;
-            var success = await _countryService.DeleteCountry(country.Id);
+            var success = await _countryService.DeleteCountry(country.Id.Value);
             IsBusy = false;
 
             if (!success)
