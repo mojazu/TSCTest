@@ -54,13 +54,15 @@ public partial class CountriesPageViewModel : BaseViewModel
     [RelayCommand]
     private async Task AddNewCountryAsync()
     {
-        //TODO: AddNewCountry navigation
+        await _navigationService.NavigateToAsync("/AddCountry");
     }
 
     [RelayCommand]
     private async Task EditCountryAsync(Country country)
     {
-        //TODO: EditCountry navigation
+        await _navigationService.NavigateToAsync(
+            "/AddCountry",
+            new Dictionary<string, object> { { "Country", country } });
     }
 
     [RelayCommand]
