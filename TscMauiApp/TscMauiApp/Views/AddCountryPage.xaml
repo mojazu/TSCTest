@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="TscMauiApp.Views.AddCountryPage"
+             Title="{Binding Title}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <VerticalStackLayout 
+        Padding="24"
+        Spacing="24">
+        <Entry 
+            Text="{Binding Name, Mode=TwoWay}"
+            Placeholder="ISO 3166 Name"
+            ReturnType="Next"
+            HorizontalTextAlignment="Center" />
+        <Entry 
+            Text="{Binding Alpha2, Mode=TwoWay}"
+            Placeholder="Alpha-2 Code"
+            ReturnType="Next"
+            HorizontalTextAlignment="Center" />
+        <Entry 
+            Text="{Binding Alpha3, Mode=TwoWay}"
+            Placeholder="Alpha-3 Code"
+            ReturnType="Next"
+            HorizontalTextAlignment="Center" />
+        <Entry 
+            Text="{Binding AreaCode, Mode=TwoWay}"
+            Placeholder="Area Code"
+            ReturnType="Next"
+            HorizontalTextAlignment="Center" />
+        <Entry
+            Text="{Binding Iso3166_2, Mode=TwoWay}"
+            Placeholder="ISO 3166-2 Code"
+            ReturnType="Done"
+            HorizontalTextAlignment="Center" />
+        <Button 
+            Text="Save"
+            IsVisible="{Binding IsBusy,Converter={StaticResource InvertedBoolConverter}}"
+            Command="{Binding SaveCountryCommand}" />
+        <ActivityIndicator
+            IsRunning="{Binding IsBusy}"
+            VerticalOptions="Start"
+            Margin="0,16,0,0" />
+    </VerticalStackLayout>
+</ContentPage>

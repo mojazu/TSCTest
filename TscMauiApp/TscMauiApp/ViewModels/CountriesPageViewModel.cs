@@ -6,12 +6,16 @@ using TscMauiApp.Services.Interfaces;
 
 namespace TscMauiApp.ViewModels;
 
+[QueryProperty(nameof(ShouldRefresh), "refresh")]
 public partial class CountriesPageViewModel : BaseViewModel
 {
     private readonly ICountryService _countryService;
 
     [ObservableProperty]
     private List<Country> _countries;
+
+    [ObservableProperty]
+    private bool _shouldRefresh;
 
     public CountriesPageViewModel(INavigationService navigationService, IDialogService dialogService, ICountryService countryService)
         : base(navigationService, dialogService)
@@ -33,10 +37,20 @@ public partial class CountriesPageViewModel : BaseViewModel
             {
                 Countries = countries;
             }
+            ShouldRefresh = false;
         }
         catch (Exception)
         {
             await _dialogService.ShowAlert("Error", "An error has occurred.", "OK");
+            IsBusy = false;
+            _ = LoadCountries();
+        }
+    }
+
+    partial void OnShouldRefreshChanged(bool value)
+    {
+        if (value)
+        {
             _ = LoadCountries();
         }
     }
@@ -54,13 +68,15 @@ public partial class CountriesPageViewModel : BaseViewModel
     [RelayCommand]
     private async Task AddNewCountryAsync()
     {
-        //TODO: AddNewCountry navigation
+        await _navigationService.NavigateToAsync("/AddCountry");
     }
 
     [RelayCommand]
     private async Task EditCountryAsync(Country country)
     {
-        //TODO: EditCountry navigation
+        await _navigationService.NavigateToAsync(
+            "/AddCountry",
+            new Dictionary<string, object> { { "Country", country } });
     }
 
     [RelayCommand]
@@ -69,6 +85,23 @@ public partial class CountriesPageViewModel : BaseViewModel
         var result = await _dialogService.ShowAlert("Delete Country", $"Are you sure you want to delete {country.Name}?", "Delete", "Cancel");
         if (!result) return;
 
-        //TODO: Delete country and refresh list.
+        try
+        {
+            IsBusy = true;
+            var success = await _countryService.DeleteCountry(country.Id.Value);
+            IsBusy = false;
+
+            if (!success)
+            {
+                await _dialogService.ShowAlert("Error", "An error has occurred.", "OK");
+                return;
+            }
+            _ = LoadCountries();
+        }
+        catch (Exception)
+        {
+            await _dialogService.ShowAlert("Error", "An error has occurred.", "OK");
+            IsBusy = false;
+        }
     }
 }
