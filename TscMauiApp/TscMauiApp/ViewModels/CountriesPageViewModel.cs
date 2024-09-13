@@ -37,6 +37,7 @@ public partial class CountriesPageViewModel : BaseViewModel
         catch (Exception)
         {
             await _dialogService.ShowAlert("Error", "An error has occurred.", "OK");
+            IsBusy = false;
             _ = LoadCountries();
         }
     }
@@ -71,6 +72,23 @@ public partial class CountriesPageViewModel : BaseViewModel
         var result = await _dialogService.ShowAlert("Delete Country", $"Are you sure you want to delete {country.Name}?", "Delete", "Cancel");
         if (!result) return;
 
-        //TODO: Delete country and refresh list.
+        try
+        {
+            IsBusy = true;
+            var success = await _countryService.DeleteCountry(country.Id);
+            IsBusy = false;
+
+            if (!success)
+            {
+                await _dialogService.ShowAlert("Error", "An error has occurred.", "OK");
+                return;
+            }
+            _ = LoadCountries();
+        }
+        catch (Exception)
+        {
+            await _dialogService.ShowAlert("Error", "An error has occurred.", "OK");
+            IsBusy = false;
+        }
     }
 }

@@ -23,6 +23,7 @@
             Margin="0,16,0,0" />
         <CollectionView 
             ItemsSource="{Binding Countries}"
+            IsVisible="{Binding IsBusy,Converter={StaticResource InvertedBoolConverter}}"
             x:Name="CountryList"
             SelectionMode="Single"
             SelectionChangedCommand="{Binding CountrySelectedCommand}"
