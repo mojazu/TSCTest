@@ -5,10 +5,14 @@ using TscMauiApp.Services.Interfaces;
 
 namespace TscMauiApp.ViewModels;
 
-[QueryProperty(nameof(Country), "Country")]
+[QueryProperty(nameof(ShouldRefresh), "refresh")]
+[QueryProperty(nameof(CountryParam), "CountryParam")]
 public partial class CountryDetailPageViewModel : BaseViewModel
 {
     private readonly ICountryService _countryService;
+
+    [ObservableProperty]
+    private Country _countryParam;
 
     [ObservableProperty]
     private Country _country;
@@ -16,21 +20,36 @@ public partial class CountryDetailPageViewModel : BaseViewModel
     [ObservableProperty]
     private List<CountrySubdivision> _subdivisions;
 
+    [ObservableProperty]
+    private bool _shouldRefresh;
+
     public CountryDetailPageViewModel(INavigationService navigationService, IDialogService dialogService, ICountryService countryService)
         : base(navigationService, dialogService)
     {
         _countryService = countryService;
     }
 
-    async partial void OnCountryChanged(Country value)
+    partial void OnCountryParamChanged(Country value)
     {
-        await LoadSubdivisions();
+        if(value == null) return;
+        Country = value;
+        _ = LoadSubdivisions();
+    }
+
+    partial void OnShouldRefreshChanged(bool value)
+    {
+        if (value)
+        {
+            _ = LoadSubdivisions();
+        }
     }
 
     private async Task LoadSubdivisions()
     {
         try
         {
+            if (Country == null) return;
+
             IsBusy = true;
             var subdivisions = await _countryService.GetCountrySubdivisions(Country.Id.Value);
             IsBusy = false;
@@ -39,6 +58,7 @@ public partial class CountryDetailPageViewModel : BaseViewModel
             {
                 Subdivisions = subdivisions;
             }
+            ShouldRefresh = false;
         }
         catch (Exception)
         {
@@ -49,13 +69,20 @@ public partial class CountryDetailPageViewModel : BaseViewModel
     [RelayCommand]
     private async Task AddSubdivisionAsync()
     {
-        await _navigationService.NavigateToAsync("AddSubdivision");
+        await _navigationService.NavigateToAsync(
+            "AddSubdivision",
+            new Dictionary<string, object> { { "Country", Country } });        
     }
 
     [RelayCommand]
     private async Task EditSubdivisionAsync(CountrySubdivision subdivision)
     {
-        Console.WriteLine("PENDING - Edit subdivision:");
+        await _navigationService.NavigateToAsync(
+            "AddSubdivision",
+            new Dictionary<string, object> { 
+                { "Country", Country },
+                { "Subdivision", subdivision }
+            }); 
     }
 
     [RelayCommand]

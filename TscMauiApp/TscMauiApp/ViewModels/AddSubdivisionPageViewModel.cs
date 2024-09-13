@@ -50,15 +50,45 @@ public partial class AddSubdivisionPageViewModel : BaseViewModel
             return;
         }
 
-        // if (!IsEditing)
-        // {
-        //     await AddSubdivisionAsync();
-        // }
-        // else
-        // {
-        //     await EditSubdivisionAsync();
-        // }
+        if (!IsEditing)
+        {
+            await AddSubdivisionAsync();
+        }
+        else
+        {
+            //await EditSubdivisionAsync();
+        }
     }
+
+    private async Task AddSubdivisionAsync()
+    {
+        try
+        {
+            IsBusy = true;
+
+            var subdivision = new CountrySubdivision
+            {
+                Name = Name
+            };
+            var success = await _countryService.AddSubdivision(subdivision, Country.Id.Value);
+
+            IsBusy = false;
+
+            if (!success)
+            {
+                await _dialogService.ShowAlert("Error", "An error has occurred.", "OK");
+                return;
+            }
+
+            await _dialogService.ShowAlert("Success", "The subdivision was successfully added.", "OK");
+            await _navigationService.PopAsync(forceRefresh: true);
+        }
+        catch (Exception)
+        {
+            await _dialogService.ShowAlert("Error", "An error has occurred.", "OK");
+            IsBusy = false;
+        }
+    }    
 
     private bool Validate()
     {

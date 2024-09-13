@@ -62,7 +62,7 @@ public partial class CountriesPageViewModel : BaseViewModel
 
         await _navigationService.NavigateToAsync(
             "CountryDetail",
-            new Dictionary<string, object> { { "Country", country } });
+            new Dictionary<string, object> { { "CountryParam", country } });
     }
 
     [RelayCommand]
