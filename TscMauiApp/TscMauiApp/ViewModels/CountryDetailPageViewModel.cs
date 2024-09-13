@@ -49,7 +49,7 @@ public partial class CountryDetailPageViewModel : BaseViewModel
     [RelayCommand]
     private async Task AddSubdivisionAsync()
     {
-        await _navigationService.NavigateToAsync("/AddSubdivision");
+        await _navigationService.NavigateToAsync("AddSubdivision");
     }
 
     [RelayCommand]
