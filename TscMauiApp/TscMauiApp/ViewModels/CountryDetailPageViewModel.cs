@@ -91,6 +91,23 @@ public partial class CountryDetailPageViewModel : BaseViewModel
         var result = await _dialogService.ShowAlert("Delete Subdivision", $"Are you sure you want to delete {subdivision.Name}?", "Delete", "Cancel");
         if (!result) return;
 
-        Console.WriteLine("PENDING - Delete subdivision:");
+        try
+        {
+            IsBusy = true;
+            var success = await _countryService.DeleteSubdivision(subdivision.Id.Value, Country.Id.Value);
+            IsBusy = false;
+
+            if (!success)
+            {
+                await _dialogService.ShowAlert("Error", "An error has occurred.", "OK");
+                return;
+            }
+            _ = LoadSubdivisions();
+        }
+        catch (Exception)
+        {
+            await _dialogService.ShowAlert("Error", "An error has occurred.", "OK");
+            IsBusy = false;
+        }
     }
 }

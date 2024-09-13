@@ -56,7 +56,7 @@ public partial class AddSubdivisionPageViewModel : BaseViewModel
         }
         else
         {
-            //await EditSubdivisionAsync();
+            await EditSubdivisionAsync();
         }
     }
 
@@ -88,7 +88,32 @@ public partial class AddSubdivisionPageViewModel : BaseViewModel
             await _dialogService.ShowAlert("Error", "An error has occurred.", "OK");
             IsBusy = false;
         }
-    }    
+    } 
+
+    private async Task EditSubdivisionAsync()
+    {
+        try
+        {
+            IsBusy = true;
+            Subdivision.Name = Name;
+            var success = await _countryService.EditSubdivision(Subdivision, Country);
+            IsBusy = false;
+
+            if (!success)
+            {
+                await _dialogService.ShowAlert("Error", "An error has occurred.", "OK");
+                return;
+            }
+
+            await _dialogService.ShowAlert("Success", "The subdivision was successfully edited.", "OK");
+            await _navigationService.PopAsync(forceRefresh: true);
+        }
+        catch (Exception)
+        {
+            await _dialogService.ShowAlert("Error", "An error has occurred.", "OK");
+            IsBusy = false;
+        }
+    }       
 
     private bool Validate()
     {
