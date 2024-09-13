@@ -19,8 +19,8 @@ public partial class LoginPageViewModel : BaseViewModel
     public LoginPageViewModel(INavigationService navigationService, IDialogService dialogService)
         : base(navigationService, dialogService)
     {
-        Email = TestValidEmail;
-        Password = TestValidPassword;
+        // Email = TestValidEmail;
+        // Password = TestValidPassword;
     }
 
     [RelayCommand]
