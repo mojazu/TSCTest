@@ -48,6 +48,7 @@ public static class MauiProgram
 		builder.Services.AddTransient<CountriesPage>();
 		builder.Services.AddTransient<CountryDetailPage>();
 		builder.Services.AddTransient<AddCountryPage>();
+		builder.Services.AddTransient<AddSubdivisionPage>();
 
 		return builder;
 	}
@@ -57,17 +58,18 @@ public static class MauiProgram
 		builder.Services.AddTransient<LoginPageViewModel>();
 		builder.Services.AddTransient<CountriesPageViewModel>();
 		builder.Services.AddTransient<CountryDetailPageViewModel>();
-		builder.Services.AddTransient<CountryDetailPageViewModel>();
 		builder.Services.AddTransient<AddCountryPageViewModel>();
+		builder.Services.AddTransient<AddSubdivisionPageViewModel>();
 
 		return builder;
 	}
 
 	private static void RegisterRoutes()
 	{
-		Routing.RegisterRoute("Login", typeof(LoginPage));
-		Routing.RegisterRoute("Countries", typeof(CountriesPage));
+		//Routing.RegisterRoute("Login", typeof(LoginPage));
+		//Routing.RegisterRoute("Countries", typeof(CountriesPage));
 		Routing.RegisterRoute("CountryDetail", typeof(CountryDetailPage));
 		Routing.RegisterRoute("AddCountry", typeof(AddCountryPage));
+		Routing.RegisterRoute("AddSubdivision", typeof(AddSubdivisionPage));
 	}
 }
